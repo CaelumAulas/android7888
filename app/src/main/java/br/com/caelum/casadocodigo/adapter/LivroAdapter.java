@@ -10,9 +10,11 @@ import android.widget.TextView;
 import java.util.List;
 
 import br.com.caelum.casadocodigo.R;
+import br.com.caelum.casadocodigo.interfaces.LivroDelegate;
 import br.com.caelum.casadocodigo.modelo.Livro;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class LivroAdapter extends RecyclerView.Adapter {
 
@@ -63,6 +65,17 @@ public class LivroAdapter extends RecyclerView.Adapter {
 
             ButterKnife.bind(this, itemView);
 
+
+        }
+
+        @OnClick(R.id.item_livro)
+        public void clickNoItem(View view) {
+
+            Livro livro = livros.get(getAdapterPosition());
+
+            LivroDelegate delegate = (LivroDelegate) view.getContext();
+
+            delegate.lidaComClickNo(livro);
         }
     }
 }

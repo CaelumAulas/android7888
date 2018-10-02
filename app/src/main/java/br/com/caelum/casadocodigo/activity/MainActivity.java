@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity  {
         setContentView(R.layout.activity_main);
 
         if (criandoPrimeiraVez(savedInstanceState)) {
-            new WebClient().buscaLivros();
+            new WebClient().buscaLivros(5, 0);
             exibe(new CarregandoFragment(), false);
         }
 
@@ -77,8 +77,20 @@ public class MainActivity extends AppCompatActivity  {
     @Subscribe
     public void lidaCom(ArrayList<Livro> livros) {
 
-        exibe(ListaLivrosFragment.com(livros), false);
+        FragmentManager manager = getSupportFragmentManager();
 
+        Fragment fragment = manager.findFragmentById(R.id.frame_principal);
+
+
+        if (fragment instanceof ListaLivrosFragment) {
+            ListaLivrosFragment livrosFragment = (ListaLivrosFragment) fragment;
+
+            livrosFragment.atualizaLista(livros);
+
+        } else {
+            exibe(ListaLivrosFragment.com(livros), false);
+
+        }
     }
 
     @Subscribe

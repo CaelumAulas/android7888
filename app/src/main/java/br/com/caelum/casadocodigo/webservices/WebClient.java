@@ -17,7 +17,7 @@ public class WebClient {
     private static final String URL = "http://cdcmob.herokuapp.com/";
 
 
-    public void buscaLivros(){
+    public void buscaLivros(int qtdLivros, int indicePrimeiroLivro) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(URL)
                 .addConverterFactory(new LivroServiceConverterFactory())
@@ -26,7 +26,7 @@ public class WebClient {
 
         LivroService service = retrofit.create(LivroService.class);
 
-        Call<ArrayList<Livro>> chamada = service.buscaLivros();
+        Call<ArrayList<Livro>> chamada = service.buscaLivros(qtdLivros, indicePrimeiroLivro);
 
         chamada.enqueue(new Callback<ArrayList<Livro>>() {
             @Override

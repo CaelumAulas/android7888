@@ -1,6 +1,8 @@
 package br.com.caelum.casadocodigo.modelo;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -25,4 +27,15 @@ public class Carrinho implements Serializable {
         return Collections.unmodifiableList(itens);
     }
 
+    public BigDecimal getValorTotal() {
+        BigDecimal valor = new BigDecimal("0.00");
+
+        for (Item item : itens) {
+            valor = valor.add(new BigDecimal(item.getValor()));
+        }
+
+        valor.setScale(2, RoundingMode.HALF_UP);
+        return valor;
+
+    }
 }

@@ -20,6 +20,7 @@ import butterknife.ButterKnife;
 
 public class ListaLivrosFragment extends Fragment {
 
+    public static final String LIVROS = "livros";
     @BindView(R.id.lista_livros)
     RecyclerView lista;
 
@@ -28,7 +29,7 @@ public class ListaLivrosFragment extends Fragment {
         ListaLivrosFragment fragment = new ListaLivrosFragment();
         Bundle arguments = new Bundle();
 
-        arguments.putSerializable("livros", livros);
+        arguments.putSerializable(LIVROS, livros);
 
         fragment.setArguments(arguments);
 
@@ -46,7 +47,7 @@ public class ListaLivrosFragment extends Fragment {
         ButterKnife.bind(this, view);
 
         Bundle argumentos = getArguments();
-        ArrayList<Livro> livros = (ArrayList<Livro>) argumentos.get("livros");
+        ArrayList<Livro> livros = (ArrayList<Livro>) argumentos.get(LIVROS);
 
         lista.setLayoutManager(new LinearLayoutManager(getContext()));
 

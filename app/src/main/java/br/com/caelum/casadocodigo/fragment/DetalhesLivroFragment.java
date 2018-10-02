@@ -16,6 +16,7 @@ import butterknife.ButterKnife;
 
 public class DetalhesLivroFragment extends Fragment {
 
+    public static final String LIVRO = "livro";
     @BindView(R.id.detalhes_livro_nome)
     TextView nome;
     @BindView(R.id.detalhes_livro_descricao)
@@ -36,7 +37,7 @@ public class DetalhesLivroFragment extends Fragment {
         DetalhesLivroFragment detalhes = new DetalhesLivroFragment();
 
         Bundle argumentos = new Bundle();
-        argumentos.putSerializable("livro", livro);
+        argumentos.putSerializable(LIVRO, livro);
         detalhes.setArguments(argumentos);
 
         return detalhes;
@@ -54,7 +55,7 @@ public class DetalhesLivroFragment extends Fragment {
         ButterKnife.bind(this, view);
 
         Bundle arguments = getArguments();
-        Livro livro = (Livro) arguments.get("livro");
+        Livro livro = (Livro) arguments.get(LIVRO);
 
         nome.setText(livro.getNome());
 

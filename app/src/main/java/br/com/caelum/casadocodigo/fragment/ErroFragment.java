@@ -14,13 +14,16 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class ErroFragment extends Fragment {
+
+    public static final String ERRO = "erro";
+
     public static ErroFragment com(Throwable erro) {
 
         ErroFragment fragment = new ErroFragment();
 
         Bundle arguments = new Bundle();
 
-        arguments.putSerializable("erro", erro);
+        arguments.putSerializable(ERRO, erro);
         fragment.setArguments(arguments);
 
         return fragment;
@@ -37,7 +40,7 @@ public class ErroFragment extends Fragment {
 
         ButterKnife.bind(this, view);
 
-        Throwable erro = (Throwable) getArguments().get("erro");
+        Throwable erro = (Throwable) getArguments().get(ERRO);
         msgErro.setText(erro.getMessage());
 
 

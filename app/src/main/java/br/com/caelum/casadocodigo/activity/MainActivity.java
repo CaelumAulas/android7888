@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -32,6 +33,7 @@ public class MainActivity extends AppCompatActivity  {
         }
 
 
+
     }
 
     @Override
@@ -47,6 +49,17 @@ public class MainActivity extends AppCompatActivity  {
         super.onPause();
         EventBus.getDefault().unregister(this);
 
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case  android.R.id.home:
+                onBackPressed();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private boolean criandoPrimeiraVez(Bundle savedInstanceState) {

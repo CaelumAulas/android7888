@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +36,7 @@ public class DetalhesLivroFragment extends Fragment {
     TextView dataPublicacao;
     @BindView(R.id.detalhes_livro_foto)
     ImageView foto;
+    private Livro livro;
 
 
     public static DetalhesLivroFragment com(Livro livro) {
@@ -48,6 +51,18 @@ public class DetalhesLivroFragment extends Fragment {
         return detalhes;
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        this.livro = getLivro();
+        AppCompatActivity activity = (AppCompatActivity) getActivity();
+        activity.setTitle(livro.getNome());
+
+        activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -59,8 +74,6 @@ public class DetalhesLivroFragment extends Fragment {
 
         ButterKnife.bind(this, view);
 
-        Bundle arguments = getArguments();
-        Livro livro = (Livro) arguments.get(LIVRO);
 
         nome.setText(livro.getNome());
         Picasso picasso = Picasso.get();
@@ -70,5 +83,10 @@ public class DetalhesLivroFragment extends Fragment {
 
         return view;
 
+    }
+
+    private Livro getLivro() {
+        Bundle arguments = getArguments();
+        return (Livro) arguments.get(LIVRO);
     }
 }

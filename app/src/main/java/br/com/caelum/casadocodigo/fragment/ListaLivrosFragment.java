@@ -53,7 +53,8 @@ public class ListaLivrosFragment extends Fragment {
 
 
         AppCompatActivity activity = (AppCompatActivity) getActivity();
-        activity.setTitle("Catalogo");
+        activity.getSupportActionBar().setTitle("Catalogo");
+        activity.getSupportActionBar().setSubtitle("");
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
     }

@@ -6,6 +6,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.ArrayList;
 
 import br.com.caelum.casadocodigo.R;
@@ -13,22 +16,43 @@ import br.com.caelum.casadocodigo.fragment.CarregandoFragment;
 import br.com.caelum.casadocodigo.fragment.DetalhesLivroFragment;
 import br.com.caelum.casadocodigo.fragment.ErroFragment;
 import br.com.caelum.casadocodigo.fragment.ListaLivrosFragment;
-import br.com.caelum.casadocodigo.interfaces.LivroDelegate;
 import br.com.caelum.casadocodigo.modelo.Livro;
 import br.com.caelum.casadocodigo.webservices.WebClient;
 
-public class MainActivity extends AppCompatActivity implements LivroDelegate {
+public class MainActivity extends AppCompatActivity  {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        new WebClient(this).buscaLivros();
-        exibe(new CarregandoFragment(), false);
+        if (criandoPrimeiraVez(savedInstanceState)) {
+            new WebClient().buscaLivros();
+            exibe(new CarregandoFragment(), false);
+        }
 
 
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        EventBus.getDefault().register(this);
+
+    }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        EventBus.getDefault().unregister(this);
+
+    }
+
+    private boolean criandoPrimeiraVez(Bundle savedInstanceState) {
+        return savedInstanceState == null;
+    }
+
 
     private void exibe(Fragment fragment, boolean empilhado) {
         FragmentManager manager = getSupportFragmentManager();
@@ -43,20 +67,21 @@ public class MainActivity extends AppCompatActivity implements LivroDelegate {
         transaction.commit();
     }
 
+    @Subscribe
     public void lidaComClickNo(Livro livro) {
 
         exibe(DetalhesLivroFragment.com(livro), true);
 
     }
 
-    @Override
+    @Subscribe
     public void lidaCom(ArrayList<Livro> livros) {
 
         exibe(ListaLivrosFragment.com(livros), false);
 
     }
 
-    @Override
+    @Subscribe
     public void lidaCom(Throwable erro) {
 
         exibe(ErroFragment.com(erro), false);

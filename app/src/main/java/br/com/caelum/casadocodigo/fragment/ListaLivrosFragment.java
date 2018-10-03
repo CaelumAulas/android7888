@@ -12,6 +12,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.mugen.Mugen;
 import com.mugen.MugenCallbacks;
 import com.mugen.attachers.BaseAttacher;
@@ -20,6 +23,7 @@ import java.util.ArrayList;
 
 import br.com.caelum.casadocodigo.R;
 import br.com.caelum.casadocodigo.adapter.LivroAdapter;
+import br.com.caelum.casadocodigo.adapter.LivroInvertidoAdapter;
 import br.com.caelum.casadocodigo.modelo.Livro;
 import br.com.caelum.casadocodigo.webservices.WebClient;
 import butterknife.BindView;
@@ -33,6 +37,7 @@ public class ListaLivrosFragment extends Fragment {
 
     private boolean carregando;
     private ArrayList<Livro> livros;
+    private FirebaseRemoteConfig remoteConfig;
 
     public static ListaLivrosFragment com(ArrayList<Livro> livros) {
 
@@ -46,17 +51,51 @@ public class ListaLivrosFragment extends Fragment {
         return fragment;
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        criaEConfiguraRemoteConfig();
+    }
+
+    private void criaEConfiguraRemoteConfig() {
+        remoteConfig = FirebaseRemoteConfig.getInstance();
+
+        remoteConfig.setDefaults(R.xml.remote_config);
+
+        remoteConfig.fetch(15).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    remoteConfig.activateFetched();
+                }
+
+            }
+        });
+    }
 
     @Override
     public void onResume() {
         super.onResume();
 
 
+        configuraActionBar();
+
+        atualizaLista();
+    }
+
+    private void atualizaLista() {
+        if (remoteConfig.getBoolean("idioma")) {
+            lista.setAdapter(new LivroInvertidoAdapter(livros));
+        } else {
+            lista.setAdapter(new LivroAdapter(livros));
+        }
+    }
+
+    private void configuraActionBar() {
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.getSupportActionBar().setTitle("Catalogo");
         activity.getSupportActionBar().setSubtitle("");
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-
     }
 
     @Nullable
@@ -74,7 +113,6 @@ public class ListaLivrosFragment extends Fragment {
 
         lista.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        lista.setAdapter(new LivroAdapter(livros));
 
 
         BaseAttacher attacher = Mugen.with(lista, new MugenCallbacks() {
@@ -106,6 +144,7 @@ public class ListaLivrosFragment extends Fragment {
         return view;
 
     }
+
 
     public void atualizaLista(ArrayList<Livro> livros) {
         carregando = false;

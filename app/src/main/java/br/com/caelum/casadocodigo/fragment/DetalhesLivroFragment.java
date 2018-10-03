@@ -13,10 +13,17 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import javax.inject.Inject;
+
 import br.com.caelum.casadocodigo.R;
+import br.com.caelum.casadocodigo.application.CasaDoCodigoApplication;
+import br.com.caelum.casadocodigo.modelo.Carrinho;
+import br.com.caelum.casadocodigo.modelo.Item;
 import br.com.caelum.casadocodigo.modelo.Livro;
+import br.com.caelum.casadocodigo.modelo.TipoDeCompra;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class DetalhesLivroFragment extends Fragment {
 
@@ -37,6 +44,8 @@ public class DetalhesLivroFragment extends Fragment {
     ImageView foto;
     private Livro livro;
 
+    @Inject
+    Carrinho carrinho;
 
     public static DetalhesLivroFragment com(Livro livro) {
 
@@ -59,6 +68,8 @@ public class DetalhesLivroFragment extends Fragment {
 
         activity.getSupportActionBar().setSubtitle(livro.getISBN());
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        CasaDoCodigoApplication.getInstance().getComponent().inject(this);
 
 
     }
@@ -83,6 +94,28 @@ public class DetalhesLivroFragment extends Fragment {
 
         return view;
 
+    }
+
+    @OnClick({R.id.detalhes_livro_comprar_ambos,
+            R.id.detalhes_livro_comprar_ebook,
+            R.id.detalhes_livro_comprar_fisico})
+    public void addLivro(View view) {
+
+
+        carrinho.adiciona(new Item(livro, tipoDeCompra(view)));
+
+
+    }
+
+    private TipoDeCompra tipoDeCompra(View view) {
+        switch (view.getId()) {
+            case R.id.detalhes_livro_comprar_ambos:
+                return TipoDeCompra.JUNTOS;
+            case R.id.detalhes_livro_comprar_ebook:
+                return TipoDeCompra.VIRTUAL;
+            default:
+                return TipoDeCompra.FISICO;
+        }
     }
 
     private Livro getLivro() {

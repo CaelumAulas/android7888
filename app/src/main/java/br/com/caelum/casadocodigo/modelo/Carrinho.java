@@ -3,9 +3,12 @@ package br.com.caelum.casadocodigo.modelo;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 public class Carrinho implements Serializable {
 
@@ -27,7 +30,7 @@ public class Carrinho implements Serializable {
         return Collections.unmodifiableList(itens);
     }
 
-    public BigDecimal getValorTotal() {
+    private BigDecimal getValorTotal() {
         BigDecimal valor = new BigDecimal("0.00");
 
         for (Item item : itens) {
@@ -37,5 +40,14 @@ public class Carrinho implements Serializable {
         valor.setScale(2, RoundingMode.HALF_UP);
         return valor;
 
+    }
+
+
+    public String getValor() {
+        NumberFormat format = DecimalFormat.
+                getCurrencyInstance(
+                        new Locale("pt", "BR"));
+
+        return format.format(getValorTotal());
     }
 }

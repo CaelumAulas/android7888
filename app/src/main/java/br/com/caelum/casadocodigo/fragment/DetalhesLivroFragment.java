@@ -3,6 +3,7 @@ package br.com.caelum.casadocodigo.fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -101,7 +102,7 @@ public class DetalhesLivroFragment extends Fragment {
             R.id.detalhes_livro_comprar_fisico})
     public void addLivro(View view) {
 
-
+        Snackbar.make(dataPublicacao, "Adicionado", Snackbar.LENGTH_LONG).show();
         carrinho.adiciona(new Item(livro, tipoDeCompra(view)));
 
 

@@ -8,4 +8,9 @@
         android:title="Carrinho"
         app:showAsAction="always" />
 
+    <item
+        android:id="@+id/menu_main_sair"
+        android:title="Sair"
+        app:showAsAction="never" />
+
 </menu>

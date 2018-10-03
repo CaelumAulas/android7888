@@ -9,6 +9,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
@@ -72,6 +74,16 @@ public class MainActivity extends AppCompatActivity  {
             case R.id.menu_main_carrinho:
                 Intent vaiParaCarrinho = new Intent(this, CarrinhoActivity.class);
                 startActivity(vaiParaCarrinho);
+
+                return true;
+
+            case R.id.menu_main_sair:
+
+                FirebaseAuth.getInstance().signOut();
+
+                finish();
+                Intent vaiParaLogin = new Intent(this, LoginActivity.class);
+                startActivity(vaiParaLogin);
 
                 return true;
         }

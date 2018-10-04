@@ -6,11 +6,14 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.messaging.RemoteMessage;
 
 import org.greenrobot.eventbus.EventBus;
@@ -20,6 +23,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 
 import br.com.caelum.casadocodigo.R;
+import br.com.caelum.casadocodigo.fcm.TokenGenerator;
 import br.com.caelum.casadocodigo.fragment.CarregandoFragment;
 import br.com.caelum.casadocodigo.fragment.DetalhesLivroFragment;
 import br.com.caelum.casadocodigo.fragment.ErroFragment;
@@ -33,6 +37,9 @@ public class MainActivity extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        new TokenGenerator().generate();
+
 
         if (criandoPrimeiraVez(savedInstanceState)) {
             new WebClient().buscaLivros(5, 0);
@@ -147,5 +154,17 @@ public class MainActivity extends AppCompatActivity  {
     public void recebeNotificao(RemoteMessage message) {
 
         Toast.makeText(this, "Chegou uma notificação", Toast.LENGTH_LONG).show();
+    }
+
+    @Subscribe
+    public void recebeToken(InstanceIdResult result){
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String email = user.getEmail();
+
+        String token = result.getToken();
+
+        Log.e("email do cara", email);
+        Log.e("token do cara", token);
     }
 }

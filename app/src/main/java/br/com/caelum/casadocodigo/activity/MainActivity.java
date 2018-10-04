@@ -8,11 +8,14 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.messaging.RemoteMessage;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 
@@ -138,5 +141,11 @@ public class MainActivity extends AppCompatActivity  {
     public void lidaCom(Throwable erro) {
 
         exibe(ErroFragment.com(erro), false);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void recebeNotificao(RemoteMessage message) {
+
+        Toast.makeText(this, "Chegou uma notificação", Toast.LENGTH_LONG).show();
     }
 }
